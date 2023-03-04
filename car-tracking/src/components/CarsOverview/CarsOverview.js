@@ -32,7 +32,7 @@ const CarsOverview = () => {
 	});
 
 	return (
-		<Card className={classes.overview}>
+		<Card className={classes["overview"]}>
 			<h4>Cars Overview</h4>
 			<SearchBox onSearch={onSearchHandler} />
 			<VerticalStepper steps={availableCars} />
