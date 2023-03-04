@@ -1,0 +1,24 @@
+.search-box {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 8px;
+	background-color: #fff;
+	width: 16rem;
+}
+
+.search-box__container {
+	display: flex;
+	justify-content: flex-end;
+}
+.search__input {
+	display: flex;
+	flex: 1;
+	border: none;
+	outline: none;
+}
+
+.search__input::placeholder {
+	color: #ccc;
+}
