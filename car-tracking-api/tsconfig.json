@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "baseUrl": "src",
+    "types": ["node","jest"],
+    "paths": {
+      "@app/*": ["app/*"],
+      "@config": ["config/index"],
+      "@loaders/*": ["loaders/*"],
+      "@models/*": ["models/*"],
+      "@types/*": ["types/*"],
+      "@common/*": ["common/*"]
+    },
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false
+  },
+  "include": ["./src/**/*"]
+}
