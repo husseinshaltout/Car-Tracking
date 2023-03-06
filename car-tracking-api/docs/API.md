@@ -1,20 +1,25 @@
-
 # API Reference
+
 # Car endpoints
 
 ### Create car
+
 ```http
   POST /api/car
 ```
+
 #### Body
+
 ```
 {
     plateNumber: string,
     longitude: float,
-    latitude: float    
+    latitude: float
 }
 ```
+
 #### Response
+
 ```
 {
     message: "Car added successfully",
@@ -27,16 +32,19 @@
     }
 }
 ```
+
 ### Read all cars
 
 ```http
   GET /api/car
 ```
+
 #### Response
+
 ```
 {
     message: "Cars retrieved successfully",
-    cars: 
+    cars:
             [
                 {
                     id: string,
@@ -50,19 +58,23 @@
             ]
 }
 ```
+
 ### Read car
 
 ```http
   GET /api/car/:plateNumber
 ```
+
 | Parameter     | Type     | Description                               |
 | :------------ | :------- | :---------------------------------------- |
 | `plateNumber` | `string` | **Required**. plateNumber of car to fetch |
+
 #### Response
+
 ```
 {
     message: "Car retrieved successfully",
-    car: 
+    car:
     {
         id: string,
         plateNumber: string,
@@ -72,9 +84,30 @@
 }
 ```
 
+### Read all average speed
 
+```http
+  GET /api/car/speed/
+```
 
+#### Response
 
+```
+{
+    message: "All cars average speed retrieved successfully",
+    speed:
+    [
+        {
+            car_id: string,
+            average_speed:float
+        },
+        {
+            ...
+        }
+
+    ]
+}
+```
 
 # Location endpoints
 
@@ -85,10 +118,11 @@
 ```
 
 #### Response
+
 ```
 {
     message: "All Locations retrieved successfully",
-    locations: 
+    locations:
     [
         {
             id: string,
@@ -106,56 +140,36 @@
 
 ```
 
-
 ### Edit coordinates
+
 ```http
   PATCH /api/location/:plateNumber
 ```
-| Parameter     | Type     | Description                               |
-| :------------ | :------- | :---------------------------------------- |
-| `plateNumber` | `string` | **Required**. plateNumber of car to edit  |
+
+| Parameter     | Type     | Description                              |
+| :------------ | :------- | :--------------------------------------- |
+| `plateNumber` | `string` | **Required**. plateNumber of car to edit |
 
 #### Body
+
 ```
 {
     longitude: float,
-    latitude: float    
+    latitude: float
 }
 ```
+
 #### Response
+
 ```
 {
     message: "Car coordinates updated successfully",
-    car: 
+    car:
     {
         id: string,
         plateNumber: string,
         lastLong: float,
         lastLat: float
     }
-}
-```
-
-### Read all average speed
-
-```http
-  GET /api/speed/
-```
-
-#### Response
-```
-{
-    message: "All cars average speed retrieved successfully",
-    speed: 
-    [
-        {
-            car_id: string,
-            average_speed:float
-        },
-        {
-            ...
-        }
-
-    ]
 }
 ```
