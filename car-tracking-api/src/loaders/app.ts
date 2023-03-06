@@ -8,6 +8,7 @@ import cors from 'cors';
 import http from 'http';
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
+import * as socketIo from 'socket.io';
 
 import logger from '@loaders/logger';
 import CrossOriginError from '@common/errors/crossOriginError';
@@ -22,6 +23,7 @@ export default class Application {
   app;
   apiRouters: appRouter[];
   server: http.Server;
+  io: socketIo.Server;
 
   // Constructor: Create an E-Tag Disable express app on construction
   constructor() {
@@ -125,6 +127,13 @@ export default class Application {
   startServer(port: number) {
     this.server = this.app.listen(port, () => {
       logger.info(`Server Started and Listening on port ${port}...`);
+    });
+  }
+
+  initSocket() {
+    this.io = new socketIo.Server(this.server);
+    this.io.on('connection', (socket) => {
+      logger.info(`Client Connected`);
     });
   }
 

@@ -32,6 +32,7 @@ export default class Server {
     this.handleExit();
     this.ConnectToDB();
     this.app.startServer(config.PORT);
+    this.app.initSocket();
   }
 
   // Database Connection Functions
