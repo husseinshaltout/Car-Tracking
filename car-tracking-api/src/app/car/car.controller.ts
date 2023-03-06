@@ -17,6 +17,7 @@ class CarController {
     // TODO: Add body Validation
     this.router.get('/', catchAsync(this.getAllCars));
     this.router.post('/', catchAsync(this.createCar));
+    this.router.get('/speed', catchAsync(this.getAllAverageSpeed));
     this.router.get('/:plateNumber', catchAsync(this.getCarByPlateNumber));
   }
 
@@ -25,6 +26,14 @@ class CarController {
     res
       .status(HttpStatus.OK)
       .json({ message: 'Cars retrieved successfully', cars: cars });
+  }
+
+  private async getAllAverageSpeed(req: Request, res: Response) {
+    const cars = await carService.getAllAverageSpeed();
+    res.status(HttpStatus.OK).json({
+      message: 'All cars average speed retrieved successfully',
+      cars: cars,
+    });
   }
 
   private async createCar(req: Request, res: Response) {

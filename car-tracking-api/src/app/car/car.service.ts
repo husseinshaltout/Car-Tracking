@@ -9,11 +9,16 @@ class CarService {
     return await Car.findAll();
   }
 
+  async getAllAverageSpeed() {
+    return await Car.findAll({ attributes: ['plate_number', 'average_speed'] });
+  }
+
   async createCar(data: any) {
     const car = await Car.create({
       plate_number: data.plateNumber,
       last_longitude: data.longitude,
       last_latitude: data.latitude,
+      average_speed: 0,
     });
 
     return car;
