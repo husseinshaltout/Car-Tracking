@@ -15,6 +15,13 @@ class Car extends Model<InferAttributes<Car>, InferCreationAttributes<Car>> {
   declare plate_number: string;
   declare last_longitude: number;
   declare last_latitude: number;
+  declare average_speed: number;
+
+  // timestamps!
+  // createdAt can be undefined during creation
+  declare createdAt: CreationOptional<Date>;
+  // updatedAt can be undefined during creation
+  declare updatedAt: CreationOptional<Date>;
 }
 
 Car.init(
@@ -29,13 +36,19 @@ Car.init(
       allowNull: false,
     },
     last_longitude: {
-      type: DataTypes.STRING,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     last_latitude: {
-      type: DataTypes.STRING,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
+    average_speed: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
 
   { sequelize }
