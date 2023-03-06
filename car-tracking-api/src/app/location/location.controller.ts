@@ -21,6 +21,7 @@ class LocationController {
 
   private async getAllLocations(req: Request, res: Response) {
     const locations = await locationService.getAllLocations();
+
     res.status(HttpStatus.OK).json({
       message: 'All Locations retrieved successfully',
       locations: locations,
