@@ -6,13 +6,13 @@ import app from '@app/index';
 
 // Import Main Server Loaders
 import Server from '@loaders/server';
-import PostgresDbLoader from '@loaders/database';
+import sequelize from '@loaders/database';
 
 // Create DB Loader Instance
-const DBLoader = new PostgresDbLoader(config.DATABASE);
+const DBLoader = sequelize;
 
 // Create Server and Start Listening
 const server = new Server(app, DBLoader);
 server.start();
 
-export { server, DBLoader };
+export { server };

@@ -1,47 +1,38 @@
+// Import Configurations
+import config from '@config';
+
 // Import Dependencies
 import { Sequelize } from 'sequelize';
 
-interface Config {
-  URI: string;
-  PASSWORD: string;
-}
+const connString = config.DATABASE.URI.replace(
+  '<PASSWORD>',
+  config.DATABASE.PASSWORD
+);
+
+const sequelize = new Sequelize(connString);
+const isDev = process.env.NODE_ENV === 'development';
+
+sequelize.sync({ alter: isDev });
+
+export default sequelize;
 
 // Class loads DB Config and had methods for connecting and disconnecting
-export default class PostgresDbLoader {
-  connString: string;
-  sequelize: Sequelize;
+// export default class SequelizeLoader {
+//   sequelize: Sequelize;
 
-  constructor(config: Config) {
-    this.connString = config.URI.replace('<PASSWORD>', config.PASSWORD);
-  }
+//   constructor(config: Config) {
+//     const connString = config.URI.replace('<PASSWORD>', config.PASSWORD);
+//     this.sequelize = new Sequelize(connString);
+//   }
 
-  connect() {
-    this.sequelize = new Sequelize(this.connString);
+//   connect() {
+//     return this.sequelize.authenticate();
+//   }
 
-    if (!this.sequelize) throw new Error('Connection Failed');
-
-    const isDev = process.env.NODE_ENV === 'development';
-
-    this.sequelize.sync({ force: isDev });
-
-    return this.sequelize.authenticate();
-  }
-
-  async closeConnection() {
-    if (this.sequelize) {
-      try {
-        await this.sequelize.close();
-        console.log('Connection has been closed successfully.');
-      } catch (error) {
-        console.error('Error closing connection:', error);
-      }
-    }
-  }
-
-  getSequelize() {
-    if (!this.sequelize) {
-      throw new Error('Sequelize instance not yet created.');
-    }
-    return this.sequelize;
-  }
-}
+//   closeConnection() {
+//     return this.sequelize.close();
+//   }
+//   getConnection() {
+//     return this.sequelize;
+//   }
+// }

@@ -3,12 +3,12 @@ import config from '@config';
 
 import logger from '@loaders/logger';
 import Application from '@loaders/app';
-import PostgresDbLoader from '@loaders/database';
+import { Sequelize } from 'sequelize';
 
 // Main Server Class
 export default class Server {
   // Constructor to initialize an App preloaded with the correct features
-  constructor(private app: Application, private DBLoader: PostgresDbLoader) {
+  constructor(private app: Application, private DBLoader: Sequelize) {
     if (config.NODE_ENV === 'development') {
       this.initDevServer();
     } else if (config.NODE_ENV === 'test') {
@@ -36,7 +36,7 @@ export default class Server {
 
   // Database Connection Functions
   async ConnectToDB() {
-    return this.DBLoader.connect()
+    return this.DBLoader.authenticate()
       .then(() => {
         logger.info('DB connection successful!');
       })
@@ -48,7 +48,7 @@ export default class Server {
   }
 
   async closeDatabaseConnection() {
-    return this.DBLoader.closeConnection();
+    return this.DBLoader.close();
   }
 
   // Initialize a Development Server
@@ -103,14 +103,14 @@ export default class Server {
 
   async stop() {
     this.app.server.close(async () => {
-      await Promise.all([this.DBLoader.closeConnection()]);
+      await Promise.all([this.DBLoader.close()]);
     });
   }
 
   // Graceful Stop Function
   private stopServer(exitCode: number) {
     this.app.server.close(async () => {
-      await Promise.all([this.DBLoader.closeConnection()]);
+      await Promise.all([this.DBLoader.close()]);
 
       logger.info('Process graceful-stop initiated!');
       process.exit(exitCode);
