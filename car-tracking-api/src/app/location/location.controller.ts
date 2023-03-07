@@ -5,6 +5,7 @@ import catchAsync from '@common/middlewares/catchAsync';
 import HttpStatus from '@common/enums/httpStatus';
 
 import locationService from '@app/location/location.service';
+import { socket } from 'server';
 
 class LocationController {
   public router = Router();
@@ -31,7 +32,7 @@ class LocationController {
   private async updateCarLocation(req: Request, res: Response) {
     const { plateNumber } = req.params;
     const car = await locationService.updateCarLocation(plateNumber, req.body);
-
+    socket.getIO().emit('track', { action: 'update', data: car });
     res.status(HttpStatus.OK).json({
       message: 'Car coordinates updated successfully',
       car: car,
