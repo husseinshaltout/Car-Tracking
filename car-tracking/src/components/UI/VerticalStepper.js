@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./VerticalStepper.module.css";
+import humanizeDuration from "humanize-duration";
 
 function VerticalStepper(props) {
 	return (
@@ -8,14 +9,16 @@ function VerticalStepper(props) {
 				<div key={index} className="step">
 					<span className={classes.title__container}>
 						<span className={classes["step__icon"]}>
-							{step.icon}
+							{props.icon}
 						</span>
-						<h2 className={classes["step__label"]}>{step.label}</h2>
+						<h2 className={classes["step__label"]}>
+							{step.plate_number}
+						</h2>
 					</span>
 
 					<div className={classes["step__content"]}>
 						<p className={classes["step__description"]}>
-							{step.description}
+							Last updated {getHumanTime(step)} ago.
 						</p>
 						<button
 							className={classes["step__button"]}
@@ -28,6 +31,13 @@ function VerticalStepper(props) {
 			))}
 		</div>
 	);
+
+	function getHumanTime(step) {
+		return humanizeDuration(
+			Date.now() - new Date(step.updatedAt).getTime(),
+			{ round: true }
+		);
+	}
 }
 
 export default VerticalStepper;

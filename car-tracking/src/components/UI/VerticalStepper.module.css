@@ -2,6 +2,9 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	overflow-y: scroll;
+	max-height: 10rem;
+	padding: 1rem 0;
 }
 
 .step {
