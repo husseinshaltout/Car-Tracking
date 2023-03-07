@@ -4,6 +4,7 @@ import config from '@config';
 import logger from '@loaders/logger';
 import Application from '@loaders/app';
 import { Sequelize } from 'sequelize';
+import SocketLoader from '@loaders/socket';
 
 // Main Server Class
 export default class Server {
@@ -27,12 +28,17 @@ export default class Server {
     return this.DBLoader;
   }
 
+  getAppServer() {
+    return this.app.server;
+  }
+
   // Server Start Function
   async start() {
     this.handleExit();
     this.ConnectToDB();
     this.app.startServer(config.PORT);
-    this.app.initSocket();
+    // this.socket.init(this.app.server, config.CORS_WHITELIST);
+    // this.app.initSocket();
   }
 
   // Database Connection Functions

@@ -8,14 +8,12 @@ import cors from 'cors';
 import http from 'http';
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
-import * as socketIo from 'socket.io';
 
 import logger from '@loaders/logger';
 import CrossOriginError from '@common/errors/crossOriginError';
 import RouteNotFoundError from '@common/errors/routeNotFoundError';
 
 import exceptionsController from '@common/middlewares/exceptionController';
-import config from '@config';
 
 // Declare Type for Route-Router Mapping
 type appRouter = { route: string; router: express.Router };
@@ -24,7 +22,6 @@ export default class Application {
   app;
   apiRouters: appRouter[];
   server: http.Server;
-  io: socketIo.Server;
 
   // Constructor: Create an E-Tag Disable express app on construction
   constructor() {
@@ -131,28 +128,12 @@ export default class Application {
     });
   }
 
-  initSocket() {
-    const whitelist: string[] = config.CORS_WHITELIST;
-    const corsOptions: cors.CorsOptions = {
-      origin: (origin, callback) => {
-        if (!origin || whitelist.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new CrossOriginError());
-        }
-      },
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
-      maxAge: 1000,
-    };
+  // initSocket() {
 
-    this.io = new socketIo.Server(this.server, {
-      cors: corsOptions,
-    });
-    this.io.on('connection', (socket) => {
-      logger.info(`Client Connected`);
-    });
-  }
+  //   this.io.on('connection', (socket) => {
+  //     logger.info(`Client ${socket.id} Connected `);
+  //   });
+  // }
 
   // Close Express Server
   closeServer() {
