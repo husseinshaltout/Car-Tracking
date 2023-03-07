@@ -9,14 +9,6 @@ import VerticalStepper from "../UI/VerticalStepper";
 import CarIcon from "../UI/CarIcon";
 
 const CarsOverview = () => {
-	const steps = [
-		{ icon: <CarIcon />, label: "abc123", description: "Was not updated" },
-		{
-			icon: <CarIcon />,
-			label: "xyz987",
-			description: "Last updated 9 minutes ago",
-		},
-	];
 	const [carsList, setCarsList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -42,7 +34,12 @@ const CarsOverview = () => {
 		}
 
 		setIsLoading(false);
-		openSocket("http://127.0.0.1:8000/");
+		const socket = openSocket("http://127.0.0.1:8000/");
+		socket.on("track", (data) => {
+			if (data.action === "update") {
+				setCarsList([...carsList, data]);
+			}
+		});
 	}, []);
 
 	useEffect(() => {

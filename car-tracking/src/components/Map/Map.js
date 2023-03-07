@@ -33,8 +33,13 @@ const Map = () => {
 		}
 
 		setIsLoading(false);
-		openSocket("http://127.0.0.1:8000/");
-	}, []);
+		const socket = openSocket("http://127.0.0.1:8000/");
+		socket.on("track", (data) => {
+			if (data.action === "update") {
+				setCarsList([...carsList, data]);
+			}
+		});
+	}, [carsList]);
 
 	useEffect(() => {
 		fetchCarsListHandler();
@@ -50,7 +55,7 @@ const Map = () => {
 		<GoogleMap
 			center={center}
 			zoom={10}
-			mapContainerStyle={{ width: "100%", height: "50vh" }}
+			mapContainerStyle={{ width: "100%", height: "100%" }}
 			options={{
 				streetViewControl: false,
 				mapTypeControl: false,

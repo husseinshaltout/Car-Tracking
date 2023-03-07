@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useState } from "react";
+import openSocket from "socket.io-client";
+
 import classes from "./AvgSpeedChart.module.css";
 
 import {
@@ -10,7 +13,6 @@ import {
 	ResponsiveContainer,
 } from "recharts";
 import Card from "../UI/Card";
-import { useCallback, useEffect, useState } from "react";
 
 const renderBarChart = (data) => (
 	<ResponsiveContainer width="100%" height={400}>
@@ -55,6 +57,12 @@ const AvgSpeedChart = () => {
 		}
 
 		setIsLoading(false);
+		const socket = openSocket("http://127.0.0.1:8000/");
+		socket.on("track", (data) => {
+			if (data.action === "update") {
+				setCarsList([...carsList, data]);
+			}
+		});
 	}, []);
 
 	useEffect(() => {
