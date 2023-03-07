@@ -15,6 +15,7 @@ import CrossOriginError from '@common/errors/crossOriginError';
 import RouteNotFoundError from '@common/errors/routeNotFoundError';
 
 import exceptionsController from '@common/middlewares/exceptionController';
+import config from '@config';
 
 // Declare Type for Route-Router Mapping
 type appRouter = { route: string; router: express.Router };
@@ -131,7 +132,23 @@ export default class Application {
   }
 
   initSocket() {
-    this.io = new socketIo.Server(this.server);
+    const whitelist: string[] = config.CORS_WHITELIST;
+    const corsOptions: cors.CorsOptions = {
+      origin: (origin, callback) => {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new CrossOriginError());
+        }
+      },
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+      maxAge: 1000,
+    };
+
+    this.io = new socketIo.Server(this.server, {
+      cors: corsOptions,
+    });
     this.io.on('connection', (socket) => {
       logger.info(`Client Connected`);
     });
