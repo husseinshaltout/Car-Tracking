@@ -24,14 +24,10 @@ function VerticalStepper(props) {
 						<button
 							className={classes["step__button"]}
 							onClick={() => {
-								props.updateCenter({
-									lat: step.last_latitude,
-									lng: step.last_longitude,
-								});
+								props.updateTrackedCar(step.id);
 							}}
 						>
-							{props.center.lat === step.last_latitude &&
-							props.center.lng === step.last_longitude
+							{step.id === props.trackedCar
 								? "Un Track"
 								: "Track Car"}
 						</button>

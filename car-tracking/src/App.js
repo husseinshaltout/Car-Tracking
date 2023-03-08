@@ -10,26 +10,23 @@ import openSocket from "socket.io-client";
 
 function App() {
 	const socket = openSocket(process.env.REACT_APP_SERVER_URL);
-	const [center, setCenter] = useState({
-		lat: 29.989871698356293,
-		lng: 31.128345066629592,
-	});
 
-	const updateCenterHandler = (newCenter) => {
-		setCenter(newCenter);
+	const [trackedCar, setTrackedCar] = useState(null);
+
+	const updateTrackedCarHandler = (carId) => {
+		setTrackedCar(carId);
 	};
 
 	return (
 		<main>
 			<div className="grid-container">
 				<div className="map__container">
-					<Map socket={socket} mapCenter={center} />
+					<Map socket={socket} trackedCar={trackedCar} />
 				</div>
 				<div className="overview__container">
 					<CarsOverview
 						socket={socket}
-						updateCenter={updateCenterHandler}
-						defaultCenter={center}
+						updateTrackedCar={updateTrackedCarHandler}
 					/>
 				</div>
 				<div className="chart__container">

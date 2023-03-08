@@ -7,15 +7,15 @@ import SearchBox from "../UI/SearchBox";
 import VerticalStepper from "../UI/VerticalStepper";
 import CarIcon from "../UI/CarIcon";
 
-const CarsOverview = ({ socket, updateCenter, defaultCenter }) => {
+const CarsOverview = ({ socket, updateTrackedCar }) => {
 	const [carsList, setCarsList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-	const [center, setCenter] = useState(defaultCenter);
+	const [trackedCar, setTrackedCar] = useState(null);
 
-	const updateCenterHandler = (newCenter) => {
-		setCenter(newCenter);
-		updateCenter(center);
+	const updateTrackedCarHandler = (carId) => {
+		setTrackedCar(carId);
+		updateTrackedCar(carId);
 	};
 
 	const updateCarLocation = useCallback((data) => {
@@ -91,8 +91,8 @@ const CarsOverview = ({ socket, updateCenter, defaultCenter }) => {
 			<VerticalStepper
 				steps={availableCars}
 				icon={<CarIcon />}
-				updateCenter={updateCenterHandler}
-				center={center}
+				updateTrackedCar={updateTrackedCarHandler}
+				trackedCar={trackedCar ?? ""}
 			/>
 		</Card>
 	);
