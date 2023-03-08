@@ -4,7 +4,6 @@ import config from '@config';
 import logger from '@loaders/logger';
 import Application from '@loaders/app';
 import { Sequelize } from 'sequelize';
-import SocketLoader from '@loaders/socket';
 
 // Main Server Class
 export default class Server {
