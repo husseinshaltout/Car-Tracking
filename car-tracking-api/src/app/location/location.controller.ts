@@ -32,7 +32,9 @@ class LocationController {
   private async updateCarLocation(req: Request, res: Response) {
     const { plateNumber } = req.params;
     const car = await locationService.updateCarLocation(plateNumber, req.body);
-    socket.getIO().emit('track', { action: 'update', data: car });
+
+    socket.getIO().emit('track', { action: 'update', data: car.dataValues });
+
     res.status(HttpStatus.OK).json({
       message: 'Car coordinates updated successfully',
       car: car,
