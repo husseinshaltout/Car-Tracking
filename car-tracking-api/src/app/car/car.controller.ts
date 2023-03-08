@@ -6,6 +6,8 @@ import HttpStatus from '@common/enums/httpStatus';
 
 import carService from '@app/car/car.service';
 
+import { socket } from 'server';
+
 class CarController {
   public router = Router();
 
@@ -38,6 +40,9 @@ class CarController {
 
   private async createCar(req: Request, res: Response) {
     const car = await carService.createCar(req.body);
+
+    socket.getIO().emit('track', { action: 'add', data: car });
+
     res
       .status(HttpStatus.CREATED)
       .json({ message: `Car added successfully`, car: car });
