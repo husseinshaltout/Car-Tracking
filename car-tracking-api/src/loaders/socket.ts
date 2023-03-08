@@ -31,28 +31,6 @@ export default class SocketLoader {
     });
   }
 
-  //   init(server: http.Server, whitelist: string[]): void {
-  //     const corsOptions: cors.CorsOptions = {
-  //       origin: (origin, callback) => {
-  //         if (!origin || whitelist.indexOf(origin) !== -1) {
-  //           callback(null, true);
-  //         } else {
-  //           callback(new CrossOriginError());
-  //         }
-  //       },
-  //       allowedHeaders: ['Content-Type', 'Authorization'],
-  //       credentials: true,
-  //       maxAge: 1000,
-  //     };
-
-  //     this.io = new Server(server, {
-  //       cors: corsOptions,
-  //     });
-
-  //     this.io.on('connection', (socket) => {
-  //       logger.info(`Client ${socket.id} Connected `);
-  //     });
-  //   }
 
   getIO() {
     if (!this.io) throw new Error('Socket Is Not Initialized');
