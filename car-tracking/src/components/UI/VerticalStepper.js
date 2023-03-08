@@ -5,8 +5,8 @@ import humanizeDuration from "humanize-duration";
 function VerticalStepper(props) {
 	return (
 		<div className={classes["vertical-stepper"]}>
-			{props.steps.map((step, index) => (
-				<div key={index} className="step">
+			{props.steps.map((step) => (
+				<div key={step.id} className="step">
 					<span className={classes.title__container}>
 						<span className={classes["step__icon"]}>
 							{props.icon}
@@ -20,11 +20,20 @@ function VerticalStepper(props) {
 						<p className={classes["step__description"]}>
 							Last updated {getHumanTime(step)} ago.
 						</p>
+
 						<button
 							className={classes["step__button"]}
-							onClick={step.onClick}
+							onClick={() => {
+								props.updateCenter({
+									lat: step.last_latitude,
+									lng: step.last_longitude,
+								});
+							}}
 						>
-							Track Car
+							{props.center.lat === step.last_latitude &&
+							props.center.lng === step.last_longitude
+								? "Un Track"
+								: "Track Car"}
 						</button>
 					</div>
 				</div>
