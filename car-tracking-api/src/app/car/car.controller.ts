@@ -40,8 +40,9 @@ class CarController {
 
   private async createCar(req: Request, res: Response) {
     const car = await carService.createCar(req.body);
+    console.log(car.dataValues);
 
-    socket.getIO().emit('track', { action: 'add', data: car });
+    socket.getIO().emit('track', { action: 'add', data: car.dataValues });
 
     res
       .status(HttpStatus.CREATED)
