@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import openSocket from "socket.io-client";
 
 import classes from "./CarsOverview.module.css";
 
@@ -8,19 +7,39 @@ import SearchBox from "../UI/SearchBox";
 import VerticalStepper from "../UI/VerticalStepper";
 import CarIcon from "../UI/CarIcon";
 
-const CarsOverview = () => {
+const CarsOverview = ({ socket }) => {
 	const [carsList, setCarsList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
+	const [center, setCenter] = useState(null);
 
+	const updateCenterHandler = (newCenter) => {
+		setCenter(newCenter);
+	};
+	const updateCarLocation = useCallback((data) => {
+		setCarsList((prevCarsList) => {
+			const updatedCarsList = [...prevCarsList];
+			const carIndex = updatedCarsList.findIndex(
+				(car) => car.id === data.id
+			);
+
+			if (carIndex > -1) {
+				updatedCarsList[carIndex] = data;
+			}
+			return updatedCarsList;
+		});
+	}, []);
 	const fetchCarsListHandler = useCallback(async () => {
 		setIsLoading(true);
 		setError(null);
 		try {
-			const response = await fetch("http://127.0.0.1:8000/api/car", {
-				crossorigin: true,
-				method: "GET",
-			});
+			const response = await fetch(
+				`${process.env.REACT_APP_SERVER_URL}/api/car`,
+				{
+					crossorigin: true,
+					method: "GET",
+				}
+			);
 
 			if (!response.ok) {
 				throw new Error("Something went wrong!");
@@ -34,17 +53,16 @@ const CarsOverview = () => {
 		}
 
 		setIsLoading(false);
-		const socket = openSocket("http://127.0.0.1:8000/");
-		socket.on("track", (data) => {
-			if (data.action === "update") {
-				setCarsList([...carsList, data]);
-			}
-		});
 	}, []);
 
 	useEffect(() => {
 		fetchCarsListHandler();
-	}, [fetchCarsListHandler]);
+		socket.on("track", (data) => {
+			if (data.action === "update") {
+				updateCarLocation(data.data);
+			}
+		});
+	}, [fetchCarsListHandler, socket, updateCarLocation]);
 
 	const [query, setQuery] = useState("");
 
@@ -66,7 +84,12 @@ const CarsOverview = () => {
 		<Card className={classes["overview"]}>
 			<h4>Cars Overview</h4>
 			<SearchBox onSearch={onSearchHandler} />
-			<VerticalStepper steps={availableCars} icon={<CarIcon />} />
+			<VerticalStepper
+				steps={availableCars}
+				icon={<CarIcon />}
+				updateCenter={updateCenterHandler}
+				center={center}
+			/>
 		</Card>
 	);
 };

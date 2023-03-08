@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import openSocket from "socket.io-client";
 
 import classes from "./AvgSpeedChart.module.css";
 
@@ -31,19 +30,36 @@ const renderBarChart = (data) => (
 	</ResponsiveContainer>
 );
 
-const AvgSpeedChart = () => {
+const AvgSpeedChart = ({ socket }) => {
 	const [carsList, setCarsList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
+
+	const updateCarLocation = useCallback((data) => {
+		setCarsList((prevCarsList) => {
+			const updatedCarsList = [...prevCarsList];
+			const carIndex = updatedCarsList.findIndex(
+				(car) => car.id === data.id
+			);
+
+			if (carIndex > -1) {
+				updatedCarsList[carIndex] = data;
+			}
+			return updatedCarsList;
+		});
+	}, []);
 
 	const fetchCarsListHandler = useCallback(async () => {
 		setIsLoading(true);
 		setError(null);
 		try {
-			const response = await fetch("http://127.0.0.1:8000/api/car", {
-				crossorigin: true,
-				method: "GET",
-			});
+			const response = await fetch(
+				`${process.env.REACT_APP_SERVER_URL}/api/car`,
+				{
+					crossorigin: true,
+					method: "GET",
+				}
+			);
 
 			if (!response.ok) {
 				throw new Error("Something went wrong!");
@@ -57,17 +73,16 @@ const AvgSpeedChart = () => {
 		}
 
 		setIsLoading(false);
-		const socket = openSocket("http://127.0.0.1:8000/");
-		socket.on("track", (data) => {
-			if (data.action === "update") {
-				setCarsList([...carsList, data]);
-			}
-		});
 	}, []);
 
 	useEffect(() => {
 		fetchCarsListHandler();
-	}, [fetchCarsListHandler]);
+		socket.on("track", (data) => {
+			if (data.action === "update") {
+				updateCarLocation(data.data);
+			}
+		});
+	}, [fetchCarsListHandler, socket, updateCarLocation]);
 
 	return (
 		<Card>
