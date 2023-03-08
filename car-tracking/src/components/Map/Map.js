@@ -1,15 +1,12 @@
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 import { useCallback, useEffect, useState } from "react";
 
-const center = {
-	lat: 29.989871698356293,
-	lng: 31.128345066629592,
-};
-
-const Map = ({ socket }) => {
+const Map = ({ socket, mapCenter }) => {
 	const [carsList, setCarsList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
+
+	const center = mapCenter;
 
 	const updateCarLocation = useCallback((data) => {
 		setCarsList((prevCarsList) => {
@@ -55,6 +52,8 @@ const Map = ({ socket }) => {
 		socket.on("track", (data) => {
 			if (data.action === "update") {
 				updateCarLocation(data.data);
+			} else if (data.action === "add") {
+				setCarsList((prevCarsList) => [...prevCarsList, data.data]);
 			}
 		});
 	}, [fetchCarsListHandler, socket, updateCarLocation]);

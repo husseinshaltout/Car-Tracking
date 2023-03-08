@@ -80,6 +80,8 @@ const AvgSpeedChart = ({ socket }) => {
 		socket.on("track", (data) => {
 			if (data.action === "update") {
 				updateCarLocation(data.data);
+			} else if (data.action === "add") {
+				setCarsList((prevCarsList) => [...prevCarsList, data.data]);
 			}
 		});
 	}, [fetchCarsListHandler, socket, updateCarLocation]);
