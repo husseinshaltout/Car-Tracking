@@ -3,6 +3,14 @@ import classes from "./VerticalStepper.module.css";
 import humanizeDuration from "humanize-duration";
 
 function VerticalStepper(props) {
+	const onClickHandler = (step) => {
+		if (step.id === props.trackedCar) {
+			props.updateTrackedCar(null); // set trackedCar to null if already tracked
+		} else {
+			props.updateTrackedCar(step.id); // set trackedCar to the clicked step ID
+		}
+	};
+
 	return (
 		<div className={classes["vertical-stepper"]}>
 			{props.steps.map((step) => (
@@ -24,7 +32,7 @@ function VerticalStepper(props) {
 						<button
 							className={classes["step__button"]}
 							onClick={() => {
-								props.updateTrackedCar(step.id);
+								onClickHandler(step);
 							}}
 						>
 							{step.id === props.trackedCar
