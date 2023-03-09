@@ -72,7 +72,7 @@ const Map = ({ socket, trackedCar }) => {
 				setCarsList((prevCarsList) => [...prevCarsList, data.data]);
 			}
 		});
-	}, [fetchCarsListHandler, socket, updateCarLocation, trackedCar, carsList]);
+	}, [fetchCarsListHandler, socket, updateCarLocation, trackedCar]);
 
 	const { isLoaded } = useJsApiLoader({
 		id: "google-map-script",
