@@ -5,11 +5,17 @@ import humanizeDuration from "humanize-duration";
 function VerticalStepper(props) {
 	const onClickHandler = (step) => {
 		if (step.id === props.trackedCar) {
-			props.updateTrackedCar(null); // set trackedCar to null if already tracked
+			props.updateTrackedCar(null);
 		} else {
-			props.updateTrackedCar(step.id); // set trackedCar to the clicked step ID
+			props.updateTrackedCar(step.id);
 		}
 	};
+	function getHumanTime(step) {
+		return humanizeDuration(
+			Date.now() - new Date(step.updatedAt).getTime(),
+			{ round: true }
+		);
+	}
 
 	return (
 		<div className={classes["vertical-stepper"]}>
@@ -44,13 +50,6 @@ function VerticalStepper(props) {
 			))}
 		</div>
 	);
-
-	function getHumanTime(step) {
-		return humanizeDuration(
-			Date.now() - new Date(step.updatedAt).getTime(),
-			{ round: true }
-		);
-	}
 }
 
 export default VerticalStepper;

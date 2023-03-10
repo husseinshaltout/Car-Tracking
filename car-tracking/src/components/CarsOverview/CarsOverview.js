@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import classes from "./CarsOverview.module.css";
 
@@ -7,66 +7,13 @@ import SearchBox from "../UI/SearchBox";
 import VerticalStepper from "../UI/VerticalStepper";
 import CarIcon from "../UI/CarIcon";
 
-const CarsOverview = ({ socket, updateTrackedCar }) => {
-	const [carsList, setCarsList] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState(null);
+const CarsOverview = ({ updateTrackedCar, carsList }) => {
 	const [trackedCar, setTrackedCar] = useState(null);
 
 	const updateTrackedCarHandler = (carId) => {
 		setTrackedCar(carId);
 		updateTrackedCar(carId);
 	};
-
-	const updateCarLocation = useCallback((data) => {
-		setCarsList((prevCarsList) => {
-			const updatedCarsList = [...prevCarsList];
-			const carIndex = updatedCarsList.findIndex(
-				(car) => car.id === data.id
-			);
-
-			if (carIndex > -1) {
-				updatedCarsList[carIndex] = data;
-			}
-			return updatedCarsList;
-		});
-	}, []);
-	const fetchCarsListHandler = useCallback(async () => {
-		setIsLoading(true);
-		setError(null);
-		try {
-			const response = await fetch(
-				`${process.env.REACT_APP_SERVER_URL}/api/car`,
-				{
-					crossorigin: true,
-					method: "GET",
-				}
-			);
-
-			if (!response.ok) {
-				throw new Error("Something went wrong!");
-			}
-
-			const carsList = await response.json();
-
-			setCarsList(carsList.cars);
-		} catch (error) {
-			setError(error.message);
-		}
-
-		setIsLoading(false);
-	}, []);
-
-	useEffect(() => {
-		fetchCarsListHandler();
-		socket.on("track", (data) => {
-			if (data.action === "update") {
-				updateCarLocation(data.data);
-			} else if (data.action === "add") {
-				setCarsList((prevCarsList) => [...prevCarsList, data.data]);
-			}
-		});
-	}, [fetchCarsListHandler, socket, updateCarLocation]);
 
 	const [query, setQuery] = useState("");
 
