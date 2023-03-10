@@ -4,8 +4,14 @@
   "description": "A car location tracking RESTful API server that allows users to track cars location, and get reports about their speed.",
   "main": "index.js",
   "scripts": {
+    "test": "cross-env NODE_ENV=test && jest --detectOpenHandles --watch",
+    "prep:paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "prep:clean": "rimraf dist/",
+    "build": "tsc && npm run prep:paths",
+    "compile": "tsc ",
+    "copy:assets": "copyfiles -u 1 src/services/email/templates/**/*.html dist/",
     "start:dev": "ts-node-dev --project tsconfig.json -r tsconfig-paths/register --files src/server.ts",
-    "test": "cross-env NODE_ENV=test && jest --detectOpenHandles --watch"
+    "start:prod": "env NODE_ENV=production node dist/server.js"
   },
   "repository": {
     "type": "git",
