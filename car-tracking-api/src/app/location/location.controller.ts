@@ -5,7 +5,7 @@ import catchAsync from '@common/middlewares/catchAsync';
 import HttpStatus from '@common/enums/httpStatus';
 
 import locationService from '@app/location/location.service';
-import { socket } from 'server';
+import { socket } from '../../server';
 
 class LocationController {
   public router = Router();
