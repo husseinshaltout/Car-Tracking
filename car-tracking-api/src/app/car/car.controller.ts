@@ -6,7 +6,7 @@ import HttpStatus from '@common/enums/httpStatus';
 
 import carService from '@app/car/car.service';
 
-import { socket } from 'server';
+import { socket } from '../../server';
 
 class CarController {
   public router = Router();
